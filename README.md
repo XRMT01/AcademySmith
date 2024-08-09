@@ -1,6 +1,4 @@
-以下是您提供的文本转换为 Markdown 格式的版本：
 
----
 
 # AcademySmith
 
@@ -40,5 +38,3 @@
 
 - GitHub：[AcademySmith](https://github.com/XRMT01/AcademySmith)
 - 邮箱：[2844669010@qq.com](mailto:2844669010@qq.com)
-
----
