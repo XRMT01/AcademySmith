@@ -80,7 +80,7 @@ namespace AcademySmith
 
 
             //界面设置
-            public string Home_widthStr = "0";
+            public string Home_widthStr = "300";
             public string Home_heightStr = "0";
 
             //全地图解锁
@@ -122,11 +122,11 @@ namespace AcademySmith
                 {
                     case 1:
                         NoticeTitle = Framework.I18nMgr.GetText("学府工具（mod）公告");
-                        NoticeContent = Framework.I18nMgr.GetText("点击键盘Home打开主菜单，当前版本是0.0.7");
+                        NoticeContent = Framework.I18nMgr.GetText("点击键盘Home或者Delete打开主菜单，当前版本是0.0.8");
                         break;
                     case 0:
                         NoticeTitle = Framework.I18nMgr.GetText("Academy Tools (mod) Announcement");
-                        NoticeContent = Framework.I18nMgr.GetText("Click on the keyboard Home to open the main menu. The current version is 0.0.7");
+                        NoticeContent = Framework.I18nMgr.GetText("Click on the keyboard Home or Delete to open the main menu, the current version is 0.0.8");
                         break;
                     default:
                         break;
@@ -194,25 +194,29 @@ namespace AcademySmith
                 windowRect.width = GetScaledWidth(int.Parse(Home_widthStr));
                 fpsWindowRect.width = GetScaledWidth(int.Parse(Home_widthStr));
                 fpsWindowRect.height = 0f;
-                CurrencyWindowRect.width = int.Parse(Home_widthStr);
+                CurrencyWindowRect.width = GetScaledWidth(int.Parse(Home_widthStr));
                 CurrencyWindowRect.height = 0f;
-                TimeWindowRect.width = int.Parse(Home_widthStr);
+                TimeWindowRect.width = GetScaledWidth(int.Parse(Home_widthStr));
                 TimeWindowRect.height = 0f;
-                TestWindowRect.width = int.Parse(Home_widthStr);
+                TestWindowRect.width = GetScaledWidth(int.Parse(Home_widthStr));
                 TestWindowRect.height = 0f;
-                settingsWindowRect.width = int.Parse(Home_widthStr);
+                settingsWindowRect.width = GetScaledWidth(int.Parse(Home_widthStr));
                 settingsWindowRect.height = 0f;
-                CharacterWindowRect.width = int.Parse(Home_widthStr);
+                CharacterWindowRect.width = GetScaledWidth(int.Parse(Home_widthStr));
                 CharacterWindowRect.height = 0f;
-                CharacterModifcationWindowRect.width = int.Parse(Home_widthStr);
+                CharacterModifcationWindowRect.width =  GetScaledWidth(int.Parse(Home_widthStr));
                 CharacterModifcationWindowRect.height = int.Parse(Home_heightStr);
-                aboutRect.width = int.Parse(Home_widthStr);
+                aboutRect.width = GetScaledWidth(int.Parse(Home_widthStr));
                 aboutRect.height = 0f;
             }
 
             //语言设置
             private void DrawAllWindows()
             {
+                if (windowRect.width > GetScaledWidth(200)) 
+                {
+                    windowRect.width = GetScaledWidth(200);
+                }
 
                 if (showUI)
                 {
@@ -281,6 +285,8 @@ namespace AcademySmith
             void DrawWindow(int windowID)
             {
                 GUILayout.BeginVertical();
+
+                GUILayout.Label(GetScaledWidth(50).ToString());
 
                 GUIStyle LabelStyle = new GUIStyle(GUI.skin.label);
                 LabelStyle.fontSize = FonSize;
@@ -773,7 +779,7 @@ namespace AcademySmith
                 }
 
 
-                /*if (GUILayout.Button(language == 1 ? "全部家具解锁" : "Unlock all furniture", ButtonStyle))
+                /*if (GUILayout.Button(language == 1 ? "全部家具解锁(无DLC验证)" : "Unlock all furniture", ButtonStyle))
                 {
 
                     MapFurnitureSubModule mapFurnitureSubModule = new MapFurnitureSubModule();
@@ -885,6 +891,7 @@ namespace AcademySmith
             private float CharacteModificationY = 200;
             private bool CharacteModificationScrollView = false;
             private Dictionary<string, bool> SearchModeList = new Dictionary<string, bool>();
+            private string[] SearchMode;
 
 
             private CharacterJobType jobType;//选择的职业
@@ -893,7 +900,7 @@ namespace AcademySmith
             //角色属性修改
             void DrawCharacterModificationWindow(int mainWindowID)
             {
-                string[] SearchMode = new string[]
+                SearchMode = new string[]
                 {
                     language == 1 ? "性别" : "gender",
                     language == 1 ? "职业" : "career",
@@ -930,10 +937,10 @@ namespace AcademySmith
                 };
 
                 //防止窗口过于小
-                if (CharacterModifcationWindowRect.width < 200)
+                if (CharacterModifcationWindowRect.width < GetScaledWidth(200))
                 {
-                    CharacterModifcationWindowRect.width = 200;
-                    CharacterWindowRect.width = 200;
+                    CharacterModifcationWindowRect.width = GetScaledWidth(200);
+                    CharacterWindowRect.width = GetScaledWidth(200);
                 }
 
                 GUIStyle LabelStyle = new GUIStyle(GUI.skin.label);
@@ -965,18 +972,19 @@ namespace AcademySmith
                     int len = i * 3 + 3 > SearchMode.Length ? SearchMode.Length : i * 3 + 3;
                     for (int j = i * 3; j < len; j++)
                     {
-                        if (GUILayout.Button(SearchMode[j], ButtonStyles, GUILayout.Width(80)))
+                        if (GUILayout.Button(SearchMode[j], ButtonStyles, GUILayout.Width(GetScaledWidth(100))))
                         {
+                            SetSearchModeListAllbool(false);
                             SearchModeList[SearchMode[j]] = !SearchModeList[SearchMode[j]];
                             if (SearchModeList[SearchMode[j]])
                             {
                                 CharacteModificationX = 0;
-                                CharacteModificationY += 50;
+                                CharacteModificationY += GetScaledHeight(75);
                             }
                             else
                             {
                                 CharacteModificationX = 0;
-                                CharacteModificationY -= 50;
+                                CharacteModificationY -= GetScaledHeight(75);
                             }
                         }
                     }
@@ -993,7 +1001,7 @@ namespace AcademySmith
                         int len = i * 3 + 3 > jobTypeList.Length ? jobTypeList.Length : i * 3 + 3;
                         for (int j = i * 3; j < len; j++)
                         {
-                            if (GUILayout.Button(jobTypeList[j], ButtonStyles, GUILayout.Width(80)))
+                            if (GUILayout.Button(jobTypeList[j], ButtonStyles, GUILayout.Width(GetScaledWidth(100))))
                             {
                                 jobType = jobTypeDict[jobTypeList[j]];
                             }
@@ -1013,7 +1021,7 @@ namespace AcademySmith
                         int len = i * 3 + 3 > genderList.Length ? genderList.Length : i * 3 + 3;
                         for (int j = i * 3; j < len; j++)
                         {
-                            if (GUILayout.Button(genderList[j], ButtonStyles, GUILayout.Width(80)))
+                            if (GUILayout.Button(genderList[j], ButtonStyles, GUILayout.Width(GetScaledWidth(100))))
                             {
                                 sex = genderDict[genderList[j]];
                             }
@@ -1032,8 +1040,8 @@ namespace AcademySmith
                 GUILayout.TextArea(searchModeTxt);*/
 
                 //人员生成
-                CharacterModifcationWindowRect.height = 700;
-                Rect srollRect = new Rect(CharacteModificationX, CharacteModificationY, CharacterModifcationWindowRect.width, CharacterModifcationWindowRect.height - 400);
+                CharacterModifcationWindowRect.height = GetScaledHeight(800);
+                Rect srollRect = new Rect(CharacteModificationX, CharacteModificationY, CharacterModifcationWindowRect.width, CharacterModifcationWindowRect.height - GetScaledHeight(400));
                 GUILayout.BeginArea(srollRect); // 定义滚动区域的大小和位置
                 CharacterModificationScrollPosition = GUILayout.BeginScrollView(CharacterModificationScrollPosition); // 开始可滚动区域，并存储滚动位置
 
@@ -1070,6 +1078,15 @@ namespace AcademySmith
 
                 GUI.DragWindow();
             }
+
+            void SetSearchModeListAllbool(bool b) 
+            {
+                for (int i = 0; i < SearchMode.Length ; i++) 
+                {
+                    SearchModeList[SearchMode[i]] = b;
+                }
+            }
+
             void InitSeachModeList()
             {
 
@@ -1171,7 +1188,8 @@ namespace AcademySmith
                     {language == 1 ? "公共汽车" : "Bus", CommutingType.Bus},
                     {language == 1 ? "电、缆车" : "Subway", CommutingType.Subway},
                     {language == 1 ? "私家车" : "PrivateCar", CommutingType.PrivateCar},
-                    {language == 1 ? "住宿" : "Stay", CommutingType.Stay}
+                    {language == 1 ? "住宿" : "Stay", CommutingType.Stay},
+                    {language == 1 ? "飞机" : "Airplane",CommutingType.Airplane }
                 };
 
 
@@ -1199,7 +1217,7 @@ namespace AcademySmith
                         int len = i * 3 + 3 > familyCircumstancesList.Length ? familyCircumstancesList.Length : i * 3 + 3;
                         for (int j = i * 3; j < len; j++)
                         {
-                            if (GUILayout.Button(familyCircumstancesList[j], ButtonStyle, GUILayout.Width(80)))
+                            if (GUILayout.Button(familyCircumstancesList[j], ButtonStyle, GUILayout.Width(GetScaledWidth(100))))
                             {
                                 characterEntity.CharacterInfo.FamilyCircumstancesType = familyCircumstancesDict[familyCircumstancesList[j]];
                             }
@@ -1214,7 +1232,7 @@ namespace AcademySmith
                         int len = i * 3 + 3 > appearanceWayList.Length ? appearanceWayList.Length : i * 3 + 3;
                         for (int j = i * 3; j < len; j++)
                         {
-                            if (GUILayout.Button(appearanceWayList[j], ButtonStyle, GUILayout.Width(80)))
+                            if (GUILayout.Button(appearanceWayList[j], ButtonStyle, GUILayout.Width(GetScaledWidth(100))))
                             {
                                 characterEntity.CharacterInfo.SetCommutingType(appearanceWayDict[appearanceWayList[j]]);
                             }
@@ -1366,7 +1384,7 @@ namespace AcademySmith
                         int len = i * 3 + 3 > familyCircumstancesList.Length ? familyCircumstancesList.Length : i * 3 + 3;
                         for (int j = i * 3; j < len; j++)
                         {
-                            if (GUILayout.Button(familyCircumstancesList[j], ButtonStyle, GUILayout.Width(80)))
+                            if (GUILayout.Button(familyCircumstancesList[j], ButtonStyle, GUILayout.Width(GetScaledWidth(100))))
                             {
                                 characterEntity.CharacterInfo.FamilyCircumstancesType = familyCircumstancesDict[familyCircumstancesList[j]];
                             }
@@ -1382,7 +1400,7 @@ namespace AcademySmith
                         int len = i * 3 + 3 > appearanceWayList.Length ? appearanceWayList.Length : i * 3 + 3;
                         for (int j = i * 3; j < len; j++)
                         {
-                            if (GUILayout.Button(appearanceWayList[j], ButtonStyle, GUILayout.Width(80)))
+                            if (GUILayout.Button(appearanceWayList[j], ButtonStyle, GUILayout.Width(GetScaledWidth(100))))
                             {
                                 characterEntity.CharacterInfo.SetCommutingType(appearanceWayDict[appearanceWayList[j]]);
                             }
@@ -1434,9 +1452,9 @@ namespace AcademySmith
             private Vector2 CertificateScrollPosition = Vector2.zero;
             void DrawCertificateWindow(int mainWindowID)
             {
-                if (RoleModifcationWindowRect.width < 300) 
+                if (RoleModifcationWindowRect.width < GetScaledWidth(300f))
                 {
-                    RoleModifcationWindowRect.width = 300f;
+                    RoleModifcationWindowRect.width = GetScaledWidth(300f);
                 }
 
                 GUIStyle LabelStyle = new GUIStyle(GUI.skin.label);
@@ -1466,7 +1484,7 @@ namespace AcademySmith
 
                 GUILayout.BeginVertical();
 
-                RoleModifcationWindowRect.height = 100 + 400;
+                RoleModifcationWindowRect.height = GetScaledHeight(800);
 
                 if (GUILayout.Button(language == 1 ? "全部证书解锁" : "Unlock all certificates", ButtonStyle))
                 {
@@ -1481,9 +1499,8 @@ namespace AcademySmith
 
 
 
-                GUILayout.BeginArea(new Rect(0, 100, RoleModifcationWindowRect.width, 300)); // 定义滚动区域的大小和位置
+                GUILayout.BeginArea(new Rect(0, GetScaledHeight(500), RoleModifcationWindowRect.width, GetScaledHeight(500))); // 定义滚动区域的大小和位置
                 CertificateScrollPosition = GUILayout.BeginScrollView(CertificateScrollPosition); // 开始可滚动区域，并存储滚动位置
-                int num = 0;
                 for(int i = 0;i< certificateBigType.Length;i++)
                 {
                     GUILayout.BeginHorizontal();
@@ -1499,6 +1516,7 @@ namespace AcademySmith
                 }
                 GUILayout.EndScrollView(); // 结束可滚动区域
                 GUILayout.EndArea(); // 结束区域
+
                 GUILayout.Space(10);
 
                 if (GUILayout.Button(language == 1 ? "关闭设置" : "Shutdown Settings", ButtonStyle))
@@ -1533,10 +1551,10 @@ namespace AcademySmith
                 GUILayout.BeginHorizontal();
 
                 GUILayout.Label(language == 1 ? "宽度: " : "Width:", LabelStyle);
-                Home_widthStr = GUILayout.TextField(Home_widthStr, GUILayout.Width(50));
+                Home_widthStr = GUILayout.TextField(Home_widthStr, GUILayout.Width(GetScaledWidth(50)));
 
                 GUILayout.Label(language == 1 ? "高度: " : "Height:", LabelStyle);
-                Home_heightStr = GUILayout.TextField(Home_heightStr, GUILayout.Width(50));
+                Home_heightStr = GUILayout.TextField(Home_heightStr, GUILayout.Width(GetScaledWidth(50)));
                 if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
                 {
                     windowRect.width = Mathf.Max(100, float.Parse(Home_widthStr));
@@ -1548,7 +1566,7 @@ namespace AcademySmith
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label(language == 1 ? "字体大小: " : "FonSize:", LabelStyle);
-                FonSize = int.Parse(GUILayout.TextField(FonSize.ToString(), GUILayout.Width(80)));
+                FonSize = int.Parse(GUILayout.TextField(FonSize.ToString(), GUILayout.Width(GetScaledWidth(80))));
 
                 GUILayout.EndHorizontal();
 
