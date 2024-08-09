@@ -12,7 +12,7 @@
 
 要安装此模组，请遵循以下步骤：
 
-1. 下载最新的 [AcademySmith.zip](https://example.com/AcademySmith.zip)。
+1. 下载最新的 [AcademySmith.zip](https://github.com/XRMT01/AcademySmith/blob/main/version/0.0.8/Academy%20Smith%20-%200.0.8.dll)。
 2. 解压缩文件夹。
 3. 将解压后的文件夹复制到学院构思家游戏的模组文件夹内。
    - 对于 Windows 用户：`C:\Users\<username>\AppData\Roaming\Academy Smith\Mods`
