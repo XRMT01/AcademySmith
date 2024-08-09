@@ -1,44 +1,44 @@
-���������ṩ���ı�ת��Ϊ Markdown ��ʽ�İ汾��
+以下是您提供的文本转换为 Markdown 格式的版本：
 
 ---
 
 # AcademySmith
 
-## ѧԺ��˼����Ϸģ��
+## 学院构思家游戏模组
 
-��ӭ���� AcademySmith������һ��רΪѧԺ��˼����Ƶ���Ϸģ�飬ּ����ǿ��Ϸ���鲢�ṩ����Ĵ�������ԡ�
+欢迎来到 AcademySmith！这是一个专为学院构思家设计的游戏模组，旨在增强游戏体验并提供更多的创意可能性。
 
-## ��װ˵��
+## 安装说明
 
-Ҫ��װ��ģ�飬����ѭ���²��裺
+要安装此模组，请遵循以下步骤：
 
-1. �������µ� [AcademySmith.zip](https://example.com/AcademySmith.zip)��
-2. ��ѹ���ļ��С�
-3. ����ѹ����ļ��и��Ƶ�ѧԺ��˼����Ϸ��ģ���ļ����ڡ�
-   - ���� Windows �û���`C:\Users\<username>\AppData\Roaming\Academy Smith\Mods`
-4. ����ѧԺ��˼����Ϸ�������µ�ģ�飡
+1. 下载最新的 [AcademySmith.zip](https://example.com/AcademySmith.zip)。
+2. 解压缩文件夹。
+3. 将解压后的文件夹复制到学院构思家游戏的模组文件夹内。
+   - 对于 Windows 用户：`C:\Users\<username>\AppData\Roaming\Academy Smith\Mods`
+4. 启动学院构思家游戏并享受新的模组！
 
-## ��ɫ����
+## 特色功能
 
-- ���� A���������� A �����ú����ʹ������
-- ���� B���������� B �����ú����ʹ������
-- ������ɫ����...
+- 功能 A：描述功能 A 的作用和如何使用它。
+- 功能 B：描述功能 B 的作用和如何使用它。
+- 更多特色功能...
 
-## ������
+## 贡献者
 
-��л���¹����ߵ�Ŭ����֧�֣�
+感谢以下贡献者的努力和支持：
 
-- XRMT (��Ŀ������)
+- XRMT (项目负责人)
 
-## ����֤
+## 许可证
 
-����Ŀ���� MIT ����֤���й���ϸ��Ϣ������� [LICENSE](./.LICENSE) �ļ���
+该项目采用 MIT 许可证。有关详细信息，请参阅 [LICENSE](./.LICENSE) 文件。
 
-## ��ϵ����
+## 联系我们
 
-��������κ����⡢������߷��ִ�����ͨ�����·�ʽ��ϵ���ǣ�
+如果你有任何问题、建议或者发现错误，请通过以下方式联系我们：
 
-- GitHub��[AcademySmith](https://github.com/XRMT01/AcademySmith)
-- ���䣺[2844669010@qq.com](mailto:2844669010@qq.com)
+- GitHub：[AcademySmith](https://github.com/XRMT01/AcademySmith)
+- 邮箱：[2844669010@qq.com](mailto:2844669010@qq.com)
 
 ---
