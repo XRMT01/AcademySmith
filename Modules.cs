@@ -779,13 +779,13 @@ namespace AcademySmith
                 }
 
 
-                /*if (GUILayout.Button(language == 1 ? "全部家具解锁(无DLC验证)" : "Unlock all furniture", ButtonStyle))
+                if (GUILayout.Button(language == 1 ? "全部家具解锁(无DLC验证)" : "Unlock all furniture", ButtonStyle))
                 {
 
                     MapFurnitureSubModule mapFurnitureSubModule = new MapFurnitureSubModule();
                     mapFurnitureSubModule.UnlockAllFurniture();
 
-                }*/
+                }
 
                 if (GUILayout.Button(language == 1 ? "关闭" : "Close", ButtonStyle))
                 {
@@ -1499,7 +1499,7 @@ namespace AcademySmith
 
 
 
-                GUILayout.BeginArea(new Rect(0, GetScaledHeight(500), RoleModifcationWindowRect.width, GetScaledHeight(500))); // 定义滚动区域的大小和位置
+                GUILayout.BeginArea(new Rect(0, GetScaledHeight(400), RoleModifcationWindowRect.width, GetScaledHeight(600))); // 定义滚动区域的大小和位置
                 CertificateScrollPosition = GUILayout.BeginScrollView(CertificateScrollPosition); // 开始可滚动区域，并存储滚动位置
                 for(int i = 0;i< certificateBigType.Length;i++)
                 {
