@@ -16,8 +16,6 @@
 2. 解压缩文件夹。
 3. 将解压后的文件夹复制到学院构思家游戏的模组文件夹内。
    - 对于 Windows 用户：`C:\Users\<username>\AppData\Roaming\Academy Smith\Mods`
-   - 对于 macOS 用户：`~/Library/Application Support/Academy Smith/Mods`
-   - 对于 Linux 用户：`~/.config/Academy Smith/Mods`
 4. 启动学院构思家游戏并享受新的模组！
 
 ## 特色功能
@@ -34,7 +32,7 @@
 
 ## 许可证
 
-该项目采用 MIT 许可证。有关详细信息，请参阅 [LICENSE](./LICENSE) 文件。
+该项目采用 MIT 许可证。有关详细信息，请参阅 [LICENSE](./.LICENSE) 文件。
 
 ## 联系我们
 
