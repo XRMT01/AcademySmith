@@ -19,10 +19,10 @@ using ProjectSchoolNs.SettingNs;
 using ProjectSchoolNs.TimeNs;
 using ProjectSchoolNs.UINs;
 using ProjectSchoolNs.WorldNs;
-using ProjectSchoolNs.WorldNs.FacilityNs;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -122,11 +122,11 @@ namespace AcademySmith
                 {
                     case 1:
                         NoticeTitle = Framework.I18nMgr.GetText("学府工具（mod）公告");
-                        NoticeContent = Framework.I18nMgr.GetText("点击键盘Home或者Delete打开主菜单，当前版本是0.0.8");
+                        NoticeContent = Framework.I18nMgr.GetText("点击键盘Home或者Delete打开主菜单，当前版本是0.0.9");
                         break;
                     case 0:
                         NoticeTitle = Framework.I18nMgr.GetText("Academy Tools (mod) Announcement");
-                        NoticeContent = Framework.I18nMgr.GetText("Click on the keyboard Home or Delete to open the main menu, the current version is 0.0.8");
+                        NoticeContent = Framework.I18nMgr.GetText("Click on the keyboard Home or Delete to open the main menu, the current version is 0.0.9");
                         break;
                     default:
                         break;
@@ -779,13 +779,13 @@ namespace AcademySmith
                 }
 
 
-                if (GUILayout.Button(language == 1 ? "全部家具解锁(无DLC验证)" : "Unlock all furniture", ButtonStyle))
+                /*if (GUILayout.Button(language == 1 ? "全部家具解锁(无DLC验证)" : "Unlock all furniture", ButtonStyle))
                 {
 
                     MapFurnitureSubModule mapFurnitureSubModule = new MapFurnitureSubModule();
                     mapFurnitureSubModule.UnlockAllFurniture();
 
-                }
+                }*/
 
                 if (GUILayout.Button(language == 1 ? "关闭" : "Close", ButtonStyle))
                 {
@@ -846,21 +846,14 @@ namespace AcademySmith
 
                 GUILayout.Label(language == 1 ? "测试功能可能会出现游戏崩溃谨慎使用" : "Testing functions may cause game crashes. Use with caution", LabelStyles);
 
-                /*GlobalToolsModule.BuilderType[] builderTypes = new GlobalToolsModule.BuilderType[]
+                string txt = "";
+                GUILayout.Label(characterEntity.CharacterInfo.Name.GetText());
+                GUILayout.Label(characterEntity.CharacterInfo.Buffs.Count.ToString());
+                foreach (CharacterBuffItem item in characterEntity.CharacterInfo.Buffs)
                 {
-                    GlobalToolsModule.BuilderType.empty,
-                    GlobalToolsModule.BuilderType.furnitureBuilder,
-                    GlobalToolsModule.BuilderType.OrganizationBuilder,
-                    GlobalToolsModule.BuilderType.furnitureBuilderV2
-                };
-
-
-                BuildingBuilder building = GlobalToolsModule.buildingBuilder;
-                if (GUILayout.Button(language == 1 ? "切换建筑模式" : "Switch building mode", ButtonStyle))    
-                {
-                    Building building1 = building.currentArea as Building;
-                    building1.SetBuidingName("XRMT");
-                }*/
+                    txt += item.BuffData.GetTipsInfo + "\n";
+                }
+                GUILayout.Label(txt);
 
                 if (GUILayout.Button(language == 1 ? "关闭" : "Close", ButtonStyle))
                 {
@@ -896,6 +889,7 @@ namespace AcademySmith
 
             private CharacterJobType jobType;//选择的职业
             private Sex sex;
+            private string SearchContent = "";
 
             //角色属性修改
             void DrawCharacterModificationWindow(int mainWindowID)
@@ -904,6 +898,7 @@ namespace AcademySmith
                 {
                     language == 1 ? "性别" : "gender",
                     language == 1 ? "职业" : "career",
+                    language == 1 ? "搜索(仅限名字)" : "Search (name only)"
                 };
 
                 string[] jobTypeList = new string[]
@@ -1030,18 +1025,17 @@ namespace AcademySmith
                     }
                 }
 
-
-                /*string searchModeTxt = "";
-                for (int i = 0; i < SearchMode.Length; i++)
+                //搜索
+                if (SearchModeList[language == 1 ? "搜索(仅限名字)" : "Search (name only)"])
                 {
-                    searchModeTxt += SearchMode[i] + "-" + SearchModeList[SearchMode[i]] + "\n";
+                    GUILayout.BeginHorizontal();
+                    SearchContent = GUILayout.TextField(SearchContent, TextField, GUILayout.Width(GetScaledWidth(300)));
+                    GUILayout.EndHorizontal();
                 }
 
-                GUILayout.TextArea(searchModeTxt);*/
-
                 //人员生成
-                CharacterModifcationWindowRect.height = GetScaledHeight(800);
-                Rect srollRect = new Rect(CharacteModificationX, CharacteModificationY, CharacterModifcationWindowRect.width, CharacterModifcationWindowRect.height - GetScaledHeight(400));
+                CharacterModifcationWindowRect.height = GetScaledHeight(900);
+                Rect srollRect = new Rect(CharacteModificationX, CharacteModificationY, CharacterModifcationWindowRect.width, CharacterModifcationWindowRect.height - GetScaledHeight(500));
                 GUILayout.BeginArea(srollRect); // 定义滚动区域的大小和位置
                 CharacterModificationScrollPosition = GUILayout.BeginScrollView(CharacterModificationScrollPosition); // 开始可滚动区域，并存储滚动位置
 
@@ -1066,6 +1060,12 @@ namespace AcademySmith
                         {
                             CreteCharacterInfo(item, ButtonStyle, LabelStyle);
                         }
+                    } else if (SearchModeList[language == 1 ? "搜索(仅限名字)" : "Search (name only)"]) 
+                    {
+                        if (item.Name.Contains(SearchContent)) 
+                        {
+                            CreteCharacterInfo(item, ButtonStyle, LabelStyle);
+                        }
                     }
                 }
 
@@ -1087,17 +1087,8 @@ namespace AcademySmith
                 }
             }
 
-            void InitSeachModeList()
-            {
 
-                //一级菜单
-                SearchModeList = new Dictionary<string, bool>()
-                {
-                    {language == 1 ? "性别" : "gender", false},
-                    {language == 1 ? "职业" : "career", false}
-                };
-            }
-
+            
 
             void CreteCharacterInfo(CharacterEntity item, GUIStyle ButtonStyle, GUIStyle LabelStyle)
             {
@@ -1134,6 +1125,8 @@ namespace AcademySmith
             private int staffabliityNum = 0;
             private int staffNum = 0;//薪资
             private int staffLeve = 0;//等级
+
+            private Dictionary<string, float> staffAbilityDictNum;
 
             //角色其他属性修改
             void DrawCharacterWindow(int mainWindowID)
@@ -1193,6 +1186,34 @@ namespace AcademySmith
                 };
 
 
+                //职业能力
+                string[] staffAbilityList = new string[]
+                {
+                    language == 1 ? "教学" : "Teaching",
+                    language == 1 ? "科研" : "Researching",
+                    language == 1 ? "管理" : "Managing",
+                    language == 1 ? "培养" : "Cultivating",
+                    language == 1 ? "医疗" : "Medical",
+                    language == 1 ? "烹饪" : "Cooking",
+                    language == 1 ? "销售" : "Sale",
+                    language == 1 ? "安保" : "Security"
+                };
+                int[] ints = new int[] { };
+                List<int> list = new List<int>(ints);
+                Dictionary<string,StaffAbilityType > staffAbilityDict = new Dictionary<string,StaffAbilityType>()
+                {
+                    {language == 1 ? "教学" : "Teaching", StaffAbilityType.TeachingAbility},
+                    {language == 1 ? "科研" : "Researching", StaffAbilityType.ResearchingAbility},
+                    {language == 1 ? "管理" : "Managing", StaffAbilityType.ManagingAbility},
+                    {language == 1 ? "培养" : "Cultivating", StaffAbilityType.CultivatingAbility},
+                    {language == 1 ? "医疗" : "Medical", StaffAbilityType.MedicalAbility},
+                    {language == 1 ? "烹饪" : "Cooking", StaffAbilityType.CookingAbility},
+                    {language== 1 ? "销售" : "Sale", StaffAbilityType.SaleAbility},
+                    {language == 1 ? "安保" : "Security", StaffAbilityType.SecurityAbility}
+                };
+                
+
+
                 GUILayout.BeginVertical();
 
 
@@ -1240,49 +1261,7 @@ namespace AcademySmith
                         GUILayout.EndHorizontal();
                     }
 
-
-
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label(language == 1 ? "教学能力" : "Teaching Ability", LabelStyle);
-                    GUILayout.Label(language == 1 ? "研究能力" : "Researching Ability", LabelStyle);
-                    GUILayout.EndHorizontal();
-
-                    GUILayout.BeginHorizontal();
-                    TeachingAbility = float.Parse(GUILayout.TextField(TeachingAbility.ToString(), TextField));
-                    if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
-                    {
-                        teacher.TeachingAbility.RawValue = TeachingAbility;
-                    }
-
-                    
-                    ResearchingAbility = float.Parse(GUILayout.TextField(ResearchingAbility.ToString(), TextField));
-                    if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
-                    {
-                        teacher.ResearchingAbility.RawValue = ResearchingAbility;
-                    }
-                    GUILayout.EndHorizontal();
-
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label(language == 1 ? "管理能力" : "Managing Ability", LabelStyle);
-                    GUILayout.Label(language == 1 ? "进修能力" : "Learning Ability", LabelStyle);
-                    GUILayout.EndHorizontal();
-
-                    GUILayout.BeginHorizontal();
-                    ManagingAbility = float.Parse(GUILayout.TextField(ManagingAbility.ToString(), TextField));
-                    if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
-                    {
-                        teacher.ManagingAbility.RawValue = ManagingAbility;
-                    }
-
-                    
-                    CultivatingAbility = float.Parse(GUILayout.TextField(CultivatingAbility.ToString(), TextField));
-                    if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
-                    {
-                        teacher.CultivatingAbility.RawValue = CultivatingAbility;
-                    }
-
-                    GUILayout.EndHorizontal();
-
+                    #region 薪资与等级
                     GUILayout.BeginHorizontal();
                     GUILayout.Label(language == 1 ? "薪资调整" : "Salary Adjustment", LabelStyle);
                     GUILayout.Label(language == 1 ? "老师等级" : "Teacher level", LabelStyle);
@@ -1297,7 +1276,7 @@ namespace AcademySmith
                     }
 
 
-                   
+
 
                     staffLeve = int.Parse(GUILayout.TextField(staffLeve.ToString(), TextField));
                     if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
@@ -1306,48 +1285,35 @@ namespace AcademySmith
                     }
 
                     GUILayout.EndHorizontal();
+                    #endregion
 
-                    if (staff.abilityDict.ContainsKey(StaffAbilityType.MedicalAbility))
+                    int abilityNum = 0;
+                    for (int i = 0; i < staffAbilityList.Length; i++)
                     {
-                        GUILayout.Label(language == 1 ? "医疗能力" : "Medical Ability", LabelStyle);
-                        MedicalAbility = int.Parse(GUILayout.TextField(MedicalAbility.ToString(), TextField));
-                        if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
+                        if (staff.abilityDict.ContainsKey(staffAbilityDict[staffAbilityList[i]])) 
                         {
-                            staff.abilityDict[StaffAbilityType.MedicalAbility].RawValue = MedicalAbility;
+                            abilityNum++;
+                            list.Add(i);
+                           
                         }
                     }
-
-                    if (staff.abilityDict.ContainsKey(StaffAbilityType.CookingAbility))
+                    ints = list.ToArray();
+                    for (int i = 0; i < ((int)Math.Ceiling((double)abilityNum / 2)); i++) 
                     {
-                        GUILayout.Label(language == 1 ? "烹饪能力" : "Cooking Ability", LabelStyle);
-                        CookingAbility = int.Parse(GUILayout.TextField(CookingAbility.ToString(), TextField));
-                        if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
+                        GUILayout.BeginHorizontal();
+                        int len = i * 2 + 2 > abilityNum ? abilityNum : i * 2 + 2;
+                        for (int j = i * 2; j < len; j++)
                         {
-                            staff.abilityDict[StaffAbilityType.CookingAbility].RawValue = CookingAbility;
+                            GUILayout.Label(staffAbilityList[ints[j]], LabelStyle);
+                            staffAbilityDictNum[staffAbilityList[ints[j]]] = int.Parse(GUILayout.TextField(staffAbilityDictNum[staffAbilityList[ints[j]]].ToString(), TextField));
+                            if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
+                            {
+                                staff.abilityDict[staffAbilityDict[staffAbilityList[ints[j]]]].RawValue = staffAbilityDictNum[staffAbilityList[ints[j]]];
+                            }
                         }
+                        GUILayout.EndHorizontal();
                     }
-
-                    if (staff.abilityDict.ContainsKey(StaffAbilityType.SaleAbility))
-                    {
-                        GUILayout.Label(language == 1 ? "销售能力" : "Sale Ability", LabelStyle);
-                        SaleAbility = int.Parse(GUILayout.TextField(SaleAbility.ToString(), TextField));
-                        if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
-                        {
-                            staff.abilityDict[StaffAbilityType.SaleAbility].RawValue = SaleAbility;
-                        }
-                    }
-
-                    if (staff.abilityDict.ContainsKey(StaffAbilityType.SecurityAbility))
-                    {
-                        GUILayout.Label(language == 1 ? "安保能力" : "Security Ability", LabelStyle);
-                        SecurityAbility = int.Parse(GUILayout.TextField(SecurityAbility.ToString(), TextField));
-                        if (GUILayout.Button(language == 1 ? "设置" : "Set Up", ButtonStyle))
-                        {
-                            staff.abilityDict[StaffAbilityType.SecurityAbility].RawValue = SecurityAbility;
-                        }
-                    }
-
-                    GUILayout.Label(language == 1 ? "所有能力一键修改" : "All abilities can be modified with just one click", LabelStyle);
+                        GUILayout.Label(language == 1 ? "所有能力一键修改" : "All abilities can be modified with just one click", LabelStyle);
                     AllAbility = int.Parse(GUILayout.TextField(AllAbility.ToString(), TextField));
                     if (GUILayout.Button(language == 1 ? "一键设置" : "One click settings", ButtonStyle))
                     {
@@ -1448,13 +1414,15 @@ namespace AcademySmith
 
                 GUI.DragWindow();
             }
+
+
             //证书修改界面
             private Vector2 CertificateScrollPosition = Vector2.zero;
             void DrawCertificateWindow(int mainWindowID)
             {
-                if (RoleModifcationWindowRect.width < GetScaledWidth(300f))
+                if (RoleModifcationWindowRect.width < GetScaledWidth(400f))
                 {
-                    RoleModifcationWindowRect.width = GetScaledWidth(300f);
+                    RoleModifcationWindowRect.width = GetScaledWidth(400f);
                 }
 
                 GUIStyle LabelStyle = new GUIStyle(GUI.skin.label);
@@ -1620,7 +1588,7 @@ namespace AcademySmith
                 GUILayout.BeginVertical();
 
                 GUILayout.Label(language == 1 ? "名称：学府工具" : "Name: Academy Tools", LabelStyle);
-                GUILayout.Label(language == 1 ? "版本：0.0.8" : "Version: 0.0.8", LabelStyle);
+                GUILayout.Label(language == 1 ? "版本：0.0.9" : "Version: 0.0.9", LabelStyle);
                 GUILayout.Label(language == 1 ? "作者：XRMT" : "Author: XRMT", LabelStyle);
 
                 if (GUILayout.Button("关闭"))
@@ -1660,6 +1628,31 @@ namespace AcademySmith
                 Singleton<RedPointManager>.Instance.AddRedPointPrompt($"Build.Envirounment.Wall.123");
             }
 
+
+            //初始化
+            void InitSeachModeList()
+            {
+
+                //一级菜单
+                SearchModeList = new Dictionary<string, bool>()
+                {
+                    {language == 1 ? "性别" : "gender", false},
+                    {language == 1 ? "职业" : "career", false},
+                    {language == 1 ? "搜索(仅限名字)" : "Search (name only)", false}
+                };
+
+                staffAbilityDictNum = new Dictionary<string, float>()
+                {
+                    {language == 1 ? "教学" : "Teaching", 0},
+                    {language == 1 ? "科研" : "Researching", 0},
+                    {language == 1 ? "管理" : "Managing", 0},
+                    {language == 1 ? "培养" : "Cultivating", 0},
+                    {language == 1 ? "医疗" : "Medical", 0},
+                    {language == 1 ? "烹饪" : "Cooking", 0},
+                    {language == 1 ? "销售" : "Sale", 0},
+                    {language == 1 ? "安保" : "Security",0}
+                };
+            }
         }
         private Mono mono;
 
